@@ -28,9 +28,32 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-        const homePlaceCollection = client.db("touristSpotDB").collection("countries");
+        const spotsCollection = client.db("touristSpotDB").collection("spots");
         const userCollection = client.db("touristSpotDB").collection("user");
 
+        // spots related apis
+
+        app.get("/allPlace",async(req,res)=>{
+            const cursor = spotsCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        app.get("/allPlace/:id",async(req,res)=>{
+            const id = req.params.id
+            console.log(id);
+            const query = {_id: new ObjectId(id)}
+            const result = await spotsCollection.findOne(query);
+            console.log(result);
+            res.send(result)
+        })
+
+
+        app.post("/addSpots", async (req, res) => {
+            const spotInfo = req.body;
+            const result = await spotsCollection.insertOne(spotInfo);
+            res.send(result);
+        })
 
 
 
@@ -46,11 +69,11 @@ async function run() {
         //     res.send(user);
         // })
 
-        app.post("/users",async(req,res)=>{
+        app.post("/users", async (req, res) => {
             const user = req.body;
             console.log(user);
             const result = await userCollection.insertOne(user);
-            res.send(result); 
+            res.send(result);
         })
 
         // Send a ping to confirm a successful connection
