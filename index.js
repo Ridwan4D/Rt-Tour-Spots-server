@@ -33,17 +33,25 @@ async function run() {
 
         // spots related apis
 
-        app.get("/allPlace",async(req,res)=>{
+        app.get("/allPlace", async (req, res) => {
             const cursor = spotsCollection.find();
             const result = await cursor.toArray();
             res.send(result)
         })
 
-        app.get("/allPlace/:id",async(req,res)=>{
+        app.get("/allPlace/:id", async (req, res) => {
             const id = req.params.id
             console.log(id);
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await spotsCollection.findOne(query);
+            console.log(result);
+            res.send(result)
+        })
+
+
+        app.get("/myList/:email", async (req, res) => {
+            console.log(req.params.email);
+            const result = await spotsCollection.find({ userEmail: req.params.email }).toArray()
             console.log(result);
             res.send(result)
         })
