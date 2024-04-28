@@ -29,10 +29,11 @@ async function run() {
         await client.connect();
 
         const spotsCollection = client.db("touristSpotDB").collection("spots");
-        const userCollection = client.db("touristSpotDB").collection("user");
+        const countryCollection = client.db("touristSpotDB").collection("countryCollection");
+
+        
 
         // spots related apis
-
         app.get("/allPlace", async (req, res) => {
             const cursor = spotsCollection.find();
             const result = await cursor.toArray();
@@ -41,10 +42,10 @@ async function run() {
 
         app.get("/allPlace/:id", async (req, res) => {
             const id = req.params.id
-            console.log(id);
+            // console.log(id);
             const query = { _id: new ObjectId(id) }
             const result = await spotsCollection.findOne(query);
-            console.log(result);
+            // console.log(result);
             res.send(result)
         })
 
