@@ -31,13 +31,25 @@ async function run() {
         const spotsCollection = client.db("touristSpotDB").collection("spots");
         const countryCollection = client.db("touristSpotDB").collection("countryCollection");
 
-        
+        // country related apis
+        app.get("/allCountry",async(req,res)=>{
+            const cursor = countryCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
 
         // spots related apis
         app.get("/allPlace", async (req, res) => {
             const cursor = spotsCollection.find();
             const result = await cursor.toArray();
             res.send(result)
+        })
+        app.get("/countrySpots/:country", async (req, res) => {
+            const query = req.params.country
+            const filter = {country: query}
+            console.log(query);
+            const result = await spotsCollection.find(filter).toArray();
+            res.send(result);
         })
 
         app.get("/allPlace/:id", async (req, res) => {
